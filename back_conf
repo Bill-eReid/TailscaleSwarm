@@ -1,0 +1,32 @@
+worker_processes 1;
+
+events {
+  worker_connections 1024;
+}
+
+http {
+  upstream backend {
+    server container1:5001;
+    server container2:5001;
+    server container3:5001;
+    server container4:5001;
+  }
+
+  server {
+    listen 80;
+    server_name localhost;
+
+    location / {
+      proxy_pass http://backend;
+    }
+  }
+
+  server {
+    listen 443;
+    server_name localhost;
+
+    location / {
+      proxy_pass http://backend;
+    }
+  }
+}
